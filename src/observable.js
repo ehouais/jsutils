@@ -20,16 +20,13 @@ define(['core'], function(core) {
                     //obj[key] = props[key];
                 }
             } else {
-                obj[key] = function() {
-                    var a = arguments ;
-                    if (a.length) {
-                        props[key] = a[0]; // TODO: check if same type
-                        obj.trigger('modified');
-                        return obj;
-                    } else {
-                        return props[key];
-                    }
-                };
+                obj[key] = core.getset(function() {
+                    return props[key];
+                }, function(val) {
+                    props[key] = val; // TODO: check if same type
+                    obj.trigger('modified');
+                    return obj;
+                });
             }
         };
 

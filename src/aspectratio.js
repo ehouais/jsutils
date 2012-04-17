@@ -6,7 +6,7 @@ define(['observable'], function(obs) {
         var updateCs = function() { cw = cs.width(); ch = cs.height(); };
         var update = function() { r = Math.min(cw/vw, ch/vh); w = cw/r; h = ch/r; rx = w/vw; ry = h/vh; };
         vb.bind('modified', function() { updateVb(); update(); v.trigger('modified'); });
-        cs.bind('modified', function() { updateCs(); update(); v.trigger('modified'); });
+        cs.bind('resized', function() { updateCs(); update(); v.trigger('modified'); });
         v.boundaries = function() { var c = vb.center(); return [c[0]-w/2, c[1]-h/2, c[0]+w/2, c[1]+h/2]; };
         v.center = function() { return vb.center(); };
         v.width = function() { return w; };
