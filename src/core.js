@@ -17,6 +17,11 @@ define(function() {
         }
         return obj;
     };
+    var getset = function(getter, setter) {
+        return function() {
+            return (arguments.length ? setter(arguments[0]) : getter());
+        };
+    };
     var clone = function(obj) {
         // Handle the 3 simple types, and null or undefined
         if (null === obj || "object" != typeof obj) return obj;
@@ -44,6 +49,7 @@ define(function() {
         isObject: isObject,
         isFunction: isFunction,
         extend: extend,
+        getset: getset,
         clone: clone
     };
 });
