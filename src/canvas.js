@@ -35,16 +35,16 @@ define(['observable', 'jquery', 'jquery_mousewheel'], function(obs, $) {
             pos = [x, y];
         };
         var mu = function() {
-            c.unbind('mousemove', mu).unbind('mousemove', mm);
+            c.off('mousemove', mu).off('mousemove', mm);
         };
-        c.mousedown(function(e) {
+        c.on('mousedown', function(e) {
             pos = [e.pageX, e.pageY];
-            c.mousemove(mm).mouseup(mu);
+            c.on('mousemove', mm).on('mouseup', mu);
             e.preventDefault();
         });
 
         // Detect zooming and trigger corresponding event
-        c.mousewheel(function(e, wd) {
+        c.on('mousewheel', function(e, wd) {
             cs.trigger('zoomed', [Math.exp(-wd/10), e.pageX/w-0.5, e.pageY/h-0.5]);
         });
 
