@@ -5,6 +5,9 @@ define(function() {
     var isObject = function(obj) {
         return (obj.constructor == Object);
     };
+    var isString = function(obj) {
+        return (typeof(obj) == 'string');
+    };
     var isFunction = function(obj) {
         var getType = {};
         return obj && getType.toString.call(obj) == '[object Function]';
@@ -47,6 +50,7 @@ define(function() {
     return {
         isArray: isArray,
         isObject: isObject,
+        isString: isString,
         isFunction: isFunction,
         extend: extend,
         getset: getset,
