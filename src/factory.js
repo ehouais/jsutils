@@ -21,15 +21,14 @@ define(['observable', 'core'], function(obs, core) {
                             });
                         }
                     } else if (core.isArray(p.type)) {
-                        data[pn] = data[pn] || p.defval;
+                        if (!core.isSet(data[pn]) || p.type.indexOf(data[pn]) == -1) {
+                            data[pn] = p.defval;
+                        }
                         o[pn] = core.getset(function() {
-                            return p.type[data[pn]];
+                            return data[pn];
                         }, function(val) {
-                            var i = p.type.indexOf(val);
-                            if (i != -1) {
-                                data[pn] = i;
-                                o.trigger('modified');
-                            }
+                            data[pn] = (p.type.indexOf(val) == -1 ? p.defval : val);
+                            o.trigger('modified');
                             return o;
                         });
                     } else {
