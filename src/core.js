@@ -12,6 +12,9 @@ define(function() {
         var getType = {};
         return obj && getType.toString.call(obj) == '[object Function]';
     };
+    var isSet = function(obj) {
+        return (typeof obj != 'undefined');
+    };
     var extend = function(obj, extObj) {
         if (arguments.length > 2) {
             for (var a = 1; a < arguments.length; a++) { extend(obj, arguments[a]); }
@@ -52,6 +55,7 @@ define(function() {
         isObject: isObject,
         isString: isString,
         isFunction: isFunction,
+        isSet: isSet,
         extend: extend,
         getset: getset,
         clone: clone
