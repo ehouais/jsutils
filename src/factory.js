@@ -6,7 +6,9 @@ define(['observable', 'core'], function(obs, core) {
                 var o = obs();
                 var addProp = function(pn, p) {
                     if (typeof(p.type) == 'string') {
-                        data[pn] = data[pn] || p.defval;
+                        if (typeof data[pn] === "undefined") {
+                            data[pn] = p.defval;
+                        }
                         if (p.access == 'readonly') {
                             o[pn] = function() {
                                 return data[pn];
