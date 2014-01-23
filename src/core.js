@@ -19,7 +19,9 @@ define(function() {
         if (arguments.length > 2) {
             for (var a = 1; a < arguments.length; a++) { extend(obj, arguments[a]); }
         } else {
-            for (var i in extObj) { obj[i] = extObj[i]; }
+            for (var key in extObj) {
+                if (extObj.hasOwnProperty(key)) obj[key] = extObj[key];
+            }
         }
         return obj;
     };
