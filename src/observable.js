@@ -35,7 +35,9 @@ define(['core'], function(core) {
         // If props are provided, make each of them a RW observable property
         // and add a [de]serialization methods
         if (props) {
-            for (var key in props) { addrwprop(obj, key); }
+            for (var key in props) {
+                if (props.hasOwnProperty(key)) addrwprop(obj, key);
+            }
             obj.serialize = function() { return JSON.stringify(props); };
         }
 
