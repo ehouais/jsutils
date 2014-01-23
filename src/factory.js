@@ -129,7 +129,7 @@ define(['observable', 'core'], function(obs, core) {
                     return e.bind('modified', function() { st.trigger('elementModified', [e]).trigger('modified'); });
                 };
                 st.each = function(cb) {
-                    data.forEach(cb);
+                    data.forEach(cb, st);
                 };
                 st.add = function(value) {
                     if (factory) {
