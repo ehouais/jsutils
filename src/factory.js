@@ -42,19 +42,21 @@ define(['observable', 'core'], function(obs, core) {
                     }
                 };
                 for (var pn in model) {
-                    addProp(pn, model[pn]);
+                    if (model.hasOwnProperty(pn)) addProp(pn, model[pn]);
                 }
                 o.snapshot = function() {
                     var s = {};
                     for (var pn in model) {
-                        s[pn] = (typeof(data[pn]) == 'object' ? data[pn].snapshot() : data[pn]);
+                        if (model.hasOwnProperty(pn)) {
+                            s[pn] = (typeof(data[pn]) == 'object' ? data[pn].snapshot() : data[pn]);
+                        }
                     }
                     return s;
                 };
                 o.toString = function() {
                     var s = [];
                     for (var pn in model) {
-                        s.push(pn+': '+data[pn]);
+                        if (model.hasOwnProperty(pn)) s.push(pn+': '+data[pn]);
                     }
                     return '{'+s.join(', ')+'}';
                 };
@@ -93,25 +95,27 @@ define(['observable', 'core'], function(obs, core) {
                 mp.snapshot = function() {
                     var s = {};
                     for (var key in data) {
-                        s[key] = (typeof(data[key]) == 'object' ? data[key].snapshot() : data[key]);
+                        if (data.hasOwnProperty(key)) {
+                            s[key] = (typeof(data[key]) == 'object' ? data[key].snapshot() : data[key]);
+                        }
                     }
                     return s;
                 };
                 mp.toString = function() {
                     var s = [];
                     for (var key in data) {
-                        s.push(key+': '+data[key]);
+                        if (data.hasOwnProperty(key)) s.push(key+': '+data[key]);
                     }
                     return '{'+s.join(', ')+'}';
                 };
                 mp.each = function(cb) {
                     for (var key in data) {
-                        cb(key);
+                        if (data.hasOwnProperty(key)) cb(key);
                     }
                 };
                 if (factory) {
                     for (var key in data) { 
-                        data[key] = bind(factory(data[key]));
+                        if (data.hasOwnProperty(key)) data[key] = bind(factory(data[key]));
                     }
                 }
                 return mp;
