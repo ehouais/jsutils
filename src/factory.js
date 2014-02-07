@@ -76,14 +76,21 @@ define(['observable', 'core'], function(obs, core) {
                 mp.get = function(key) {
                     return data[key];
                 };
-                mp.set = function(key, value) {
-                    if (factory) {
-                        // value is either snapshot data to use for initialization
-                        // or an initialization callback called before any event binding is done
-                        value = bind(core.isFunction(value) ? value(factory()) : factory(value));
+                mp.set = function() {
+                    var args = arguments;
+                    if (args.length > 1) {
+                        var key = args[0], value = args[1];
+                        if (factory) {
+                            // value is either snapshot data to use for initialization
+                            // or an initialization callback called before any event binding is done
+                            value = bind(core.isFunction(value) ? value(factory()) : factory(value));
+                        }
+                        data[key] = value;
+                        mp.trigger('elementAdded', [value]).trigger('modified');
+                    } else if (core.isObject(args[0])) {
+                        data = args[0];
+                        mp.trigger('modified');
                     }
-                    data[key] = value;
-                    mp.trigger('elementAdded', [value]).trigger('modified');
                     return mp;
                 };
                 mp.delete = function(key) {
