@@ -51,13 +51,21 @@ define(['core'], function(core) {
             return this;
         };
         obj.unbind = function(types, o) {
-            types.split(' ').forEach(function(type) {
-                var ost = os[type];
-                if (ost) {
-                    var i = ost.indexOf(o);
-                    if (i != -1) { ost.splice(i, 1); }
-                }
-            });
+            if (types) {
+                types.split(' ').forEach(function(type) {
+                    var ost = os[type];
+                    if (ost) {
+                        if (o) {
+                            var i = ost.indexOf(o);
+                            if (i != -1) { ost.splice(i, 1); }
+                        } else {
+                            os[type] = [];
+                        }
+                    }
+                });
+            } else {
+                os = {};
+            }
             return this;
         };
         obj.trigger = function(type, data) {
@@ -69,7 +77,6 @@ define(['core'], function(core) {
             }
             return this;
         };
-        obj.unbindAll = function() { os = {}; return this; };
         if (props) { obj.snapshot = function() { return core.clone(props); }; }
 
         return obj;
