@@ -130,6 +130,7 @@ define(['observable', 'core'], function(obs, core) {
                 };
                 st.each = function(cb) {
                     data.forEach(cb, st);
+                    return this;
                 };
                 st.add = function(value) {
                     if (factory) {
