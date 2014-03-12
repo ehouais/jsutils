@@ -1,4 +1,8 @@
 define(['jquery'], function($) {
+    var newId = function() {
+        //return Date.now();
+        return Math.random().toString(36).substr(2, 9);
+    };
     return {
         local: function(options) {
             var save = function(id, data) {
@@ -9,7 +13,7 @@ define(['jquery'], function($) {
             };
             return {
                 create: function(data) {
-                    return save(options.prefix+'-'+Date.now(), data);
+                    return save(options.prefix+'-'+newId(), data);
                 },
                 load: function(id) {
                     var deferred = $.Deferred();
@@ -36,7 +40,7 @@ define(['jquery'], function($) {
             return {
                 create: function(data) {
                     var deferred = $.Deferred();
-                    $.ajax(enrich({url: options.collection, type: 'POST', data: data})).done(function(data, status, request) {
+                    $.ajax(enrich({url: options.collection, type: 'POST', data: JSON.stringify(data)})).done(function(data, status, request) {
                         deferred.resolve(data/*request.getResponseHeader('Content-Location')*/);
                     });
                     return deferred;
@@ -97,6 +101,30 @@ define(['jquery'], function($) {
                     return deferred;
                 }
             };
+        },
+        // OpenKeyval: 64KiB max. per key - site presently not working
+        openkeyval: function(options) {
+            return {
+                create: function(data) {
+                    var id = newId(),
+                        deferred = $.Deferred();
+                    $.ajax({url: 'http://api.openkeyval.org/store/', data: options.prefix+'-'+id+'='+JSON.stringify(data), dataType: 'jsonp'}).done(function() {
+                        deferred.resolve(id);
+                    });
+                    return deferred;
+                },
+                load: function(id) {
+                    var deferred = $.Deferred();
+                    $.ajax({url: 'http://api.openkeyval.org/'+options.prefix+'-'+id, dataType: 'jsonp'}).done(function(result) {
+                        deferred.resolve(JSON.parse(result));
+                    });
+                    return deferred;
+                },
+                save: function(id, data) {
+                    return $.ajax({url: 'http://api.openkeyval.org/store/', data: options.prefix+'-'+id+'='+JSON.stringify(data), dataType: 'jsonp'});
+                },
+                delete: function(id) {}
+            }
         }
     };
 });
