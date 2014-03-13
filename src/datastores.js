@@ -41,7 +41,7 @@ define(['jquery'], function($) {
                 create: function(data) {
                     var deferred = $.Deferred();
                     $.ajax(enrich({url: options.collection, type: 'POST', data: JSON.stringify(data)})).done(function(data, status, request) {
-                        deferred.resolve(data/*request.getResponseHeader('Content-Location')*/);
+                        deferred.resolve(request.getResponseHeader('Content-Location'));
                     });
                     return deferred;
                 },
